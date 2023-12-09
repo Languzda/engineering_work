@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Path, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
+import json
+import asyncio
 
 app = FastAPI()
 
@@ -47,10 +49,37 @@ robot_state = RobotState(
     photo_url="https://picsum.photos/200/300"
 )
 
+connected_clients = set()
+
+async def send_state_to_clients():
+    if connected_clients:
+        update_message = {"event": "update", "data": robot_state.dict()}
+        update_message_str = json.dumps(update_message)
+        await asyncio.gather(*(client.send_text(update_message_str) for client in connected_clients))
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    connected_clients.add(websocket)
+    print("Client connected:", websocket)
+    
+    # Wysłanie aktualnych danych zaraz po nawiązaniu połączenia
+    await send_state_to_clients()
+    
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await websocket.send_text(f"Message text was: {data}")
+    except WebSocketDisconnect:
+        connected_clients.remove(websocket)
+        print("Client disconnected:", websocket)
+        await send_state_to_clients()  # Zaktualizuj wywołanie funkcji
+
 # Get robot state
 @app.get("/state")
 async def get_state():
-    return robot_state
+    await send_state_to_clients()
+    return {"message": "OK"}
 
 # Login user
 @app.get("/login")
@@ -58,7 +87,8 @@ async def get_login(user: str, password: str):
     # Implement login
     robot_state.logged = True
     robot_state.user = user
-    return {"message": "Endpoint to implement", "robot_state": robot_state.dict()}
+    await send_state_to_clients()
+    return {"message": "Endpoint to implement"}
 
 # Logout user
 @app.get("/logout")
@@ -66,7 +96,8 @@ async def get_logout():
     # Implement logout
     robot_state.logged = False
     robot_state.user = ""
-    return {"message": "Endpoint to implement", "robot_state": robot_state.dict()}
+    await send_state_to_clients()
+    return {"message": "Endpoint to implement"}
 
 # Implement robot move orders
 @app.get("/movetrajectory/{move_id}")
