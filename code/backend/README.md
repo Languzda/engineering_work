@@ -1,4 +1,3 @@
-
 ## Dependencies
 
 Python 3
@@ -14,8 +13,15 @@ Fastapi
 ```bash
   pip install fastapi
 ```
-To run 
+
+To run
 
 ```bash
-  uvicorn api:app --reload  
+  uvicorn api:app --reload
+```
+
+To check endpoints go to
+
+```
+  http://localhost:8000/docs
 ```
