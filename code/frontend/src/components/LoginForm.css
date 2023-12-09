@@ -1,0 +1,28 @@
+.loginFormBox {
+  max-width: 100rem;
+  padding: 4rem;
+  background-color: white;
+
+  font-size: 1.8rem;
+  color: #000;
+  border-radius: 1rem;
+}
+
+.loginFormBox h1 {
+  font-size: 3.2rem;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2rem;
+}
+
+.loginForm input[type="text"] {
+  font-size: 1.8rem;
+}
+
+.loginForm input[type="password"] {
+  font-size: 1.8rem;
+}

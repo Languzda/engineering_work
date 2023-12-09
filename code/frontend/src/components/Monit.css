@@ -1,0 +1,76 @@
+.nav {
+  height: 10%;
+  width: 100%;
+  background-color: #003459;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.test {
+  width: 100%;
+  height: 40%;
+  background-color: #bde9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.container-container {
+  width: 100%;
+  height: 50%;
+  background-color: #00171f;
+
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-control {
+  width: 30%;
+  height: 70%;
+  font-size: 64px;
+  border: none;
+  font-weight: 700;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-active-start {
+  color: #fff;
+  background-color: #a0d897;
+}
+
+.btn-active-stop {
+  color: #fff;
+  background-color: #ee7777;
+}
+.btn-start {
+  color: #42683c;
+  background-color: #608c59;
+}
+
+.btn-start::before {
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.btn-stop {
+  color: #802f2f;
+  background-color: #ae4d4d;
+}
+
+.btn-stop::before {
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
