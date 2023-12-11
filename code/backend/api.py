@@ -1,14 +1,10 @@
 from fastapi import FastAPI, Path, WebSocket, WebSocketDisconnect
-from pydantic import BaseModel
 import json
 import asyncio
+from models import RobotState, Container, Sensor
+import connection
 
 app = FastAPI()
-
-class Container(BaseModel):
-    container_id: int
-    container_name: str
-    container_blocks: int
 
 # You should fetch information about containers from the database or elsewhere
 DUMMY_CONTAINERS = [
@@ -16,23 +12,6 @@ DUMMY_CONTAINERS = [
     Container(container_id=2, container_name="container2", container_blocks=2),
     Container(container_id=3, container_name="container3", container_blocks=3)
 ]
-
-class Sensor(BaseModel):
-    sensor_id: int
-    sensor_name: str
-    sensor_value: int
-
-class RobotState(BaseModel):
-    containers: list[Container]
-    sensors: dict[int,Sensor]
-    logged: bool
-    user: str
-    mode: str
-    block: int
-    working: bool
-    belt_running: bool
-    robort_working: bool
-    photo_url: str
 
 robot_state = RobotState(
     containers=DUMMY_CONTAINERS,
@@ -51,7 +30,8 @@ robot_state = RobotState(
     photo_url="https://picsum.photos/200/300"
 )
 
-connected_clients = set()
+
+connected_clients = connection.connected_clients
 
 async def send_state_to_clients():
     if connected_clients:
@@ -119,6 +99,7 @@ async def get_move_trajectory(move_id: int = Path(..., gt=-1, le=3)):
         await send_state_to_clients()
         return {"message": "OK"}
     else:
+        await send_state_to_clients()
         return {"message": "Error: Robot is working"}
 
 @app.get("/stop")
