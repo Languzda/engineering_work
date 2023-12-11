@@ -2,7 +2,6 @@ from fastapi import FastAPI, Path, WebSocket, WebSocketDisconnect
 import json
 import asyncio
 from models import RobotState, Container, Sensor
-import connection
 
 app = FastAPI()
 
@@ -30,12 +29,11 @@ robot_state = RobotState(
     photo_url="https://picsum.photos/200/300"
 )
 
-
-connected_clients = connection.connected_clients
+connected_clients:set[WebSocket] = set()
 
 async def send_state_to_clients():
     if connected_clients:
-        update_message = {"event": "update", "data": robot_state.dict()}
+        update_message = {"event": "update", "data": robot_state.model_dump()}
         update_message_str = json.dumps(update_message)
         await asyncio.gather(*(client.send_text(update_message_str) for client in connected_clients))
 
