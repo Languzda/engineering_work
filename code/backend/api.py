@@ -2,8 +2,18 @@ from fastapi import FastAPI, Path, WebSocket, WebSocketDisconnect
 import json
 import asyncio
 from models import RobotState, Container, Sensor
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# Dodaj middleware do obsługi CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Tutaj możesz określić dozwolone domeny
+    allow_credentials=True,
+    allow_methods=["*"],  # Tutaj możesz określić dozwolone metody HTTP
+    allow_headers=["*"],  # Tutaj możesz określić dozwolone nagłówki
+)
 
 # You should fetch information about containers from the database or elsewhere
 DUMMY_CONTAINERS = [
