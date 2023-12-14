@@ -72,8 +72,10 @@ async def get_state():
     return {"message": "OK", "data": robot_state.model_dump()}
 
 # Login user
-@app.get("/login")
-async def get_login(user: str, password: str):
+@app.post("/login")
+async def get_login(request_body: dict):
+    user = request_body.get("user")
+    password = request_body.get("password")
     # Implement login
     robot_state.logged = True
     robot_state.user = user
