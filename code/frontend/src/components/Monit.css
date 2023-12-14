@@ -74,3 +74,10 @@
   top: 0;
   left: 0;
 }
+
+.actions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30px;
+}

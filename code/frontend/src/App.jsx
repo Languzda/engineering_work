@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import LoginForm from "./components/LoginForm";
 import Monit from "./components/Monit";
+import getRequests from "./components/Utils/api";
 
 import "./App.css";
 
@@ -9,7 +10,9 @@ function App() {
   const [isLogged, setIsLogged] = useState(false);
 
   const onLoginHandle = () => {
-    console.log(isLogged);
+    if (isLogged) {
+      getRequests.getLogoutRequest();
+    }
     setIsLogged((prev) => !prev);
   };
 
@@ -18,7 +21,7 @@ function App() {
       {isLogged ? (
         <Monit logout={onLoginHandle} />
       ) : (
-        <LoginForm login={onLoginHandle} />
+        <LoginForm onlogin={onLoginHandle} />
       )}
     </div>
   );
