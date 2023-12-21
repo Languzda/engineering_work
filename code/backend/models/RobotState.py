@@ -7,7 +7,7 @@ from .Sensor import Sensor
 
 class RobotState(BaseModel):
     containers: list[Container]
-    sensors: dict[int,Sensor]
+    sensors: dict[str,Sensor]
     logged: bool
     user: str
     mode: str
@@ -15,6 +15,8 @@ class RobotState(BaseModel):
     working: bool
     belt_running: bool
     robort_working: bool
+    box_on_belt: bool
+    prediction: bool
     photo_url: str
 
     # async def send_state_to_clients(self,ws_connections: set):
