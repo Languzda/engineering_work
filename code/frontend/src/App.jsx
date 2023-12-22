@@ -7,13 +7,20 @@ import getRequests from "./components/Utils/api";
 import "./App.css";
 
 function App() {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(
+    localStorage.getItem("isLogged")
+      ? localStorage.getItem("isLogged") === "true"
+      : false
+  );
 
   const onLoginHandle = () => {
     if (isLogged) {
       getRequests.getLogoutRequest();
     }
-    setIsLogged((prev) => !prev);
+    setIsLogged((prev) => {
+      localStorage.setItem("isLogged", !prev);
+      return !prev;
+    });
   };
 
   return (
