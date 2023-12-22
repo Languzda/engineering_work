@@ -4,11 +4,8 @@ from tasma import start,stop,wait
 import kamera_testy
 import skrypt
 import predykcja
-import threading
-from globalss import working_flag
 import Robot_code
 import connection
-from fastapi import BackgroundTasks
 import asyncio
 
 robot_state = Robot_code.RobotCode.robot_state

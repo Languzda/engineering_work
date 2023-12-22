@@ -2,8 +2,6 @@ from fastapi import WebSocket
 import asyncio
 import json
 
-
-
 class Connection:
     con_ws:set[WebSocket] = set()
 

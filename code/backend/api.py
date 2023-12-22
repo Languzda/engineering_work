@@ -1,18 +1,12 @@
 from fastapi import FastAPI, Path, WebSocket, WebSocketDisconnect
-import json
-import asyncio
-from models import RobotState, Container, Sensor
 from fastapi.middleware.cors import CORSMiddleware
 import Robot_code
 import connection
 import test_1
-from fastapi import BackgroundTasks
-import asyncio
 import threading
 
 
 ########
-from tasma import stop,start,wait
 from main import task_tasma,task_czujnik
 
 robot_state = Robot_code.RobotCode.robot_state
@@ -50,7 +44,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             data = await websocket.receive_text()
             await websocket.send_text(f"Message text was: {data}")
-            await test_1.start_web_socket()
+            # await test_1.start_web_socket()
     except WebSocketDisconnect:
         connection.connected_clients.remove(websocket)
         print("Client disconnected:", websocket)
@@ -95,7 +89,6 @@ async def get_logout():
 async def get_move_trajectory(move_id: int = Path(..., gt=-1, le=3)):
     # Implement robot move orders
     if(robot_state.working == False):
-        # Implement robot move (wykorzystaj send_state_to_clients(robot_state) po aktualizacji stanu robota)
         await send_state_to_clients(robot_state)
         return {"message": "OK"}
     else:
