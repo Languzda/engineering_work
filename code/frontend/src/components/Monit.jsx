@@ -37,6 +37,7 @@ const DUMMY_AUTOMAT_STATE = {
 const Monit = (props) => {
   const [automatState, setAutomatState] = useState(DUMMY_AUTOMAT_STATE);
   const [websocket, setWebsocket] = useState(null);
+  const [logWebSocket, setLogWebSocket] = useState(null);
   const [logs, setLogs] = useState([]);
 
   const addLog = (log, logTime = null) => {
@@ -54,10 +55,23 @@ const Monit = (props) => {
 
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8000/ws");
+    const logWS = new WebSocket("ws://localhost:8000/ws/logs");
+
+    logWS.onopen = () => {
+      console.log("Połączono z LogWebSocketem");
+      setLogWebSocket(logWS);
+    };
 
     ws.onopen = () => {
       console.log("Połączono z WebSocketem");
       setWebsocket(ws);
+    };
+
+    logWS.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.event === "update") {
+        console.log("log", data.data);
+      }
     };
 
     ws.onmessage = (event) => {
@@ -69,22 +83,6 @@ const Monit = (props) => {
               type: "info",
               message: `Zmieniono tryb pracy na ${data.data.mode}`,
             });
-          }
-
-          if (prev.working !== data.data.working) {
-            // add log to logger
-          }
-
-          if (prev.belt_running !== data.data.belt_running) {
-            // add log to logger
-          }
-
-          if (prev.robort_working !== data.data.robort_working) {
-            // add log to logger
-          }
-
-          if (prev.block !== data.data.block) {
-            // add log to logger
           }
 
           return {
@@ -100,8 +98,6 @@ const Monit = (props) => {
             photo_url: data.data.photo_url,
           };
         });
-
-        console.log("sensors", data.data.sensors);
       }
     };
 
@@ -110,9 +106,17 @@ const Monit = (props) => {
       setWebsocket(null);
     };
 
+    logWS.onclose = () => {
+      console.log("Rozłączono z LogWebSocketem");
+      setLogWebSocket(null);
+    };
+
     return () => {
       if (websocket) {
         websocket.close();
+      }
+      if (logWebSocket) {
+        logWebSocket.close();
       }
     };
   }, []);
@@ -131,14 +135,7 @@ const Monit = (props) => {
     if (automatState.working) {
       getRequests.getStopRequest();
     } else {
-      getRequests
-        .getStartRequest()
-        .then((res) => {
-          console.log("response w fk", res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      getRequests.getStartRequest();
     }
   };
 
