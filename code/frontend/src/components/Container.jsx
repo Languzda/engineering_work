@@ -4,9 +4,9 @@ import "./Container.css";
 
 const MAX_BLOCKS = 15;
 
-const Container = ({dane}) => {
-  const { numberOfContainer, numberOfBlocks } = dane;
-
+const Container = ({ dane }) => {
+  const numberOfContainer = dane.container_id;
+  const numberOfBlocks = dane.container_blocks;
   const numberOfBlocksToShow =
     numberOfBlocks > MAX_BLOCKS ? MAX_BLOCKS : numberOfBlocks;
 
@@ -47,8 +47,9 @@ const Container = ({dane}) => {
 
 Container.propTypes = {
   dane: PropTypes.shape({
-    numberOfContainer: PropTypes.number.isRequired,
-    numberOfBlocks: PropTypes.number.isRequired,
+    container_id: PropTypes.number.isRequired,
+    container_blocks: PropTypes.number.isRequired,
+    container_name: PropTypes.string,
   }).isRequired,
 };
 
