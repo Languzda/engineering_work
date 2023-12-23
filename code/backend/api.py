@@ -2,14 +2,15 @@ from fastapi import FastAPI, Path, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 import Robot_code
 import connection
-import test_1
+# import test_1
 import threading
-
+import logs
 
 ########
 from main import task_tasma,task_czujnik
 
 robot_state = Robot_code.RobotCode.robot_state
+logger = logs.logger
 working_flag = 0
 
 thread_tasma = threading.Thread(target=task_tasma)
@@ -30,6 +31,7 @@ app.add_middleware(
 
 
 send_state_to_clients = connection.send_state_to_clients
+send_log_to_clients = connection.send_log_to_clients
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -49,6 +51,19 @@ async def websocket_endpoint(websocket: WebSocket):
         connection.connected_clients.remove(websocket)
         print("Client disconnected:", websocket)
         await send_state_to_clients(robot_state)  # Zaktualizuj wywołanie funkcji
+
+@app.websocket("/ws/logs")
+async def log_websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    connection.connected_clients_log.add(websocket)
+    print("Log client connected:", websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await websocket.send_text(f"Message text was: {data}")
+    except WebSocketDisconnect:
+        connection.connected_clients_log.remove(websocket)
+        print("Log client disconnected:", websocket)
 
 # Get robot state
 @app.get("/state")
@@ -114,6 +129,8 @@ async def get_start():
         return {"message": "Everything is already working"}
     else:
         robot_state.working = True
+        logger.add("info", "Robot started")
+        await send_log_to_clients(logger)
         await send_state_to_clients(robot_state)
         return {"message": "OK_start"}
 
