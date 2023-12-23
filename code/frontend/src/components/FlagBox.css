@@ -1,0 +1,29 @@
+.flag-box {
+  width: 40%;
+  height: 100%;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.flag-box-header {
+  width: 100%;
+  height: 10%;
+  color: #000;
+  font-size: 2.4rem;
+  font-weight: 700;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flag-box-flags {
+  height: 90%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
