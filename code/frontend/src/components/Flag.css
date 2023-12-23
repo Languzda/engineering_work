@@ -1,0 +1,23 @@
+.flag {
+  width: auto;
+  padding: 1rem 2rem;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+
+  color: #000;
+  font-size: 1.8rem;
+}
+
+.flag-status {
+  background-color: #ff0000;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.flag-status.active {
+  background-color: #00ff00;
+}
