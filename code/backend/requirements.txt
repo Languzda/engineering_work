@@ -1,2 +1,15 @@
 fastapi
 uvicorn[standard]
+#nie wiem czy o to chodzilo
+gpiozero
+time
+keras
+matplotlib
+json
+threading
+logs
+cv2
+os
+datetime
+numpy
+adafruit_servokit

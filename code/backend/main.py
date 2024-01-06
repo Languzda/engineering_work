@@ -7,9 +7,12 @@ import predykcja
 import Robot_code
 import connection
 import asyncio
+import logs
 
 robot_state = Robot_code.RobotCode.robot_state
 send_state_to_clients = connection.send_state_to_clients
+logger = logs.logger
+send_log_to_clients = connection.send_log_to_clients
 
 
 def task_tasma():
@@ -53,6 +56,8 @@ def task_tasma():
                     skrypt.tr3()
             if robot_state.mode == 'auto':
                 while robot_state.block == 3 :
+                    logger.add("info", "Robot is waiting for a container to be selected")
+                    asyncio.run(send_log_to_clients(logger))
                     asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
                     wait
                     sleep(2)

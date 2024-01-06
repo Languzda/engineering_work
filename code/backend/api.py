@@ -109,14 +109,20 @@ async def get_move_trajectory(move_id: int = Path(..., gt=-1, le=3)):
     elif(robot_state.working == True):
         if move_id == 0:
             robot_state.block = 0
+            logger.add("info", "First container selected")
+            await send_log_to_clients(logger)
             await send_state_to_clients(robot_state)
             return {"message": "blok0"}
         elif move_id == 1:
             robot_state.block = 1
+            logger.add("info", "Second container selected")
+            await send_log_to_clients(logger)
             await send_state_to_clients(robot_state)
             return {"message": "blok1"}
         elif move_id == 2:
             robot_state.block = 2
+            logger.add("info", "Third container selected")
+            await send_log_to_clients(logger)
             await send_state_to_clients(robot_state)
             return {"message": "blok2"}
         else:
@@ -128,6 +134,8 @@ async def get_stop():
     print(robot_state.working)
     if robot_state.working:
         robot_state.working = False
+        logger.add("info", "Robot stopped")
+        await send_log_to_clients(logger)
         await send_state_to_clients(robot_state)
         return {"message": "OK_stop"}
     else:
