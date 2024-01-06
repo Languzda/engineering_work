@@ -30,24 +30,46 @@ def task_tasma():
             asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
             sleep(0.3) 
             robot_state.sensors["sensor1"].sensor_value = 0
-            asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
-            wait() 
-            kamera_testy.kamera()
-            robot_state.prediction = True
-            asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
-            pred = predykcja.pred()
-            robot_state.prediction = False
             asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+            wait()
+
+            if robot_state.mode == 'manual':
+                kamera_testy.kamera()
+                robot_state.prediction = True
+                asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
+                pred = predykcja.pred()
+                robot_state.prediction = False
+                asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+
             start()
             sleep(2.1)
             wait() 
-            if pred == 0:
-                skrypt.tr1()
-            elif pred == 1:
-                skrypt.tr2()
-            elif pred == 2:
-                skrypt.tr3()
-
+            if robot_state.mode == 'manual':
+                if pred == 0:
+                    skrypt.tr1()
+                elif pred == 1:
+                    skrypt.tr2()
+                elif pred == 2:
+                    skrypt.tr3()
+            if robot_state.mode == 'auto':
+                while robot_state.block == 3 :
+                    asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+                    wait
+                    sleep(2)
+                    print("Czekam na podanie trajektroii")
+                while robot_state.block != 3 :
+                    if robot_state.block == 0:
+                        skrypt.tr1()
+                        robot_state.block = 3
+                        asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+                    elif robot_state.block == 1:
+                        skrypt.tr2()
+                        robot_state.block = 3
+                        asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+                    elif robot_state.block == 2:
+                        skrypt.tr3()
+                        robot_state.block = 3
+                        asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
 
 
 

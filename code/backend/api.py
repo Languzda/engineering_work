@@ -106,10 +106,23 @@ async def get_move_trajectory(move_id: int = Path(..., gt=-1, le=3)):
     if(robot_state.working == False):
         await send_state_to_clients(robot_state)
         return {"message": "OK"}
-    else:
-        await send_state_to_clients(robot_state)
-        return {"message": "Error: Robot is working"}
-
+    elif(robot_state.working == True):
+        if move_id == 0:
+            robot_state.block = 0
+            await send_state_to_clients(robot_state)
+            return {"message": "blok0"}
+        elif move_id == 1:
+            robot_state.block = 1
+            await send_state_to_clients(robot_state)
+            return {"message": "blok1"}
+        elif move_id == 2:
+            robot_state.block = 2
+            await send_state_to_clients(robot_state)
+            return {"message": "blok2"}
+        else:
+            await send_state_to_clients(robot_state)
+            return {"message": "Error: Robot is working"}
+    
 @app.get("/stop")
 async def get_stop():
     print(robot_state.working)
