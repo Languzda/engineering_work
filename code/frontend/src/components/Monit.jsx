@@ -28,6 +28,8 @@ const DUMMY_AUTOMAT_STATE = {
   user: "",
   mode: "manual",
   block: 0,
+  box_on_belt: false,
+  prediction: false,
   working: false,
   belt_running: false,
   robort_working: false,
@@ -92,6 +94,8 @@ const Monit = (props) => {
             user: data.data.user,
             mode: data.data.mode,
             block: data.data.block,
+            box_on_belt: data.data.box_on_belt,
+            prediction: data.data.prediction,
             working: data.data.working,
             belt_running: data.data.belt_running,
             robort_working: data.data.robort_working,
@@ -121,14 +125,14 @@ const Monit = (props) => {
     };
   }, []);
 
-  // const onChangeMode = () => {
-  //   console.log("change mode");
-  //   if (automatState.mode === "manual") {
-  //     getRequests.getModeRequest(1);
-  //   } else {
-  //     getRequests.getModeRequest(0);
-  //   }
-  // };
+  const onChangeMode = () => {
+    console.log("change mode");
+    if (automatState.mode === "manual") {
+      getRequests.getModeRequest(1);
+    } else {
+      getRequests.getModeRequest(0);
+    }
+  };
 
   const onChangeWorking = () => {
     console.log("change working");
@@ -145,25 +149,30 @@ const Monit = (props) => {
 
   const allFlags = [
     ...sensorsFlags,
-    { flag: automatState.working, label: "working" },
-    { flag: automatState.belt_running, label: "belt_running" },
-    { flag: automatState.robort_working, label: "robort_working" },
-    { flag: automatState.logged, label: "logged" },
+    { flag: automatState.working, label: "System up" },
+    { flag: automatState.belt_running, label: "Taśma w ruchu" },
+    { flag: automatState.robort_working, label: "Robot w ruchu" },
     { flag: automatState.mode === "auto", label: "Tryb Auto" },
-    { flag: automatState.block, label: "block" },
+    { flag: automatState.box_on_belt, label: "Obiekt na taśmie" },
+    { flag: automatState.prediction, label: "Predykcja" },
   ];
+
+  const disableButtons =
+    automatState.mode === "auto" || automatState.working === false
+      ? true
+      : false;
 
   return (
     <>
       <nav className="nav">
         <div className="actions">
-          {/* <SwitchComponent
+          <SwitchComponent
             offStateString="Manual"
             onStateString="Auto"
             enable={true}
             onChange={onChangeMode}
             isSwitchOn={automatState.mode === "auto"}
-          /> */}
+          />
           <SwitchComponent
             offStateString="STOP"
             onStateString="START"
@@ -178,6 +187,29 @@ const Monit = (props) => {
       <div className="test">
         <FlagBox flags={allFlags} />
         <Logger logs={logs} />
+      </div>
+      <div className="buttons-tra">
+        <Button
+          disabled={disableButtons}
+          className={"btn-tra"}
+          onClick={() => getRequests.getMoveTrajectory(0)}
+        >
+          Wybierz pojemnik 1
+        </Button>
+        <Button
+          disabled={disableButtons}
+          className={"btn-tra"}
+          onClick={() => getRequests.getMoveTrajectory(1)}
+        >
+          Wybierz pojemnik 2
+        </Button>
+        <Button
+          disabled={disableButtons}
+          className={"btn-tra"}
+          onClick={() => getRequests.getMoveTrajectory(2)}
+        >
+          Wybierz pojemnik 3
+        </Button>
       </div>
       <div className="container-container">
         <Container dane={automatState.containers[0]} />
