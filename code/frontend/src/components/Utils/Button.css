@@ -6,4 +6,26 @@
   color: #000;
   background-color: #fff;
   font-size: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn[disabled] {
+  color: #fff;
+  background-color: #aaa;
+}
+
+.btn[disabled]:hover {
+  cursor: not-allowed;
+  outline: none;
+}
+
+.btn[disabled]::before {
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: 0;
+  left: 0;
 }
