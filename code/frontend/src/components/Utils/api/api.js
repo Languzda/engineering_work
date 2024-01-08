@@ -73,7 +73,7 @@ export const getModeRequest = async (mode) => {
 };
 
 export const getMoveTrajectory = async (trajectory) => {
-  const response = await fetch(`${apiURL}trajectory/${trajectory}`, {
+  const response = await fetch(`${apiURL}movetrajectory/${trajectory}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

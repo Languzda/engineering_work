@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import LoginForm from "./components/LoginForm";
 import Monit from "./components/Monit";
 import getRequests from "./components/Utils/api";
@@ -7,18 +6,22 @@ import getRequests from "./components/Utils/api";
 import "./App.css";
 
 function App() {
-  const [isLogged, setIsLogged] = useState(
-    localStorage.getItem("isLogged")
-      ? localStorage.getItem("isLogged") === "true"
-      : false
-  );
+  const [isLogged, setIsLogged] = useState(async () => {
+    const response = await getRequests.getAutomatState();
+    const state = response.data.logged;
+    console.log("state", state);
+    return state;
+  });
 
-  const onLoginHandle = () => {
+  const onLoginHandle = async () => {
     if (isLogged) {
-      getRequests.getLogoutRequest();
+      await getRequests.getLogoutRequest();
+    } else {
+      await getRequests.getLoginRequest();
     }
+
     setIsLogged((prev) => {
-      localStorage.setItem("isLogged", !prev);
+      console.log("prev", prev);
       return !prev;
     });
   };

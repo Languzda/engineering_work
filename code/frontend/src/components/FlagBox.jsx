@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 import "./FlagBox.css";
 
-import Flag from "./flag";
+import Flag from "./Flag";
 
 const FlagBox = ({ flags }) => {
   return (
