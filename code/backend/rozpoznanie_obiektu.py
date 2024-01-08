@@ -3,7 +3,7 @@
 import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
-from tensorflow.keras.models import load_model
+
 
 train_datagen = ImageDataGenerator(
         rescale=1./255,

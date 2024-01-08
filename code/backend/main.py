@@ -23,6 +23,8 @@ def task_tasma():
             skrypt.push_block()
             robot_state.box_on_belt = True
             asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+            logger.add("info", "Klocek zosta podany na tasme")
+            asyncio.run(send_log_to_clients(logger))
             while czujnik.czunik_kamery(pin_r=0) == 0 :
                 sleep(0.1)
                 success = start()
@@ -36,10 +38,12 @@ def task_tasma():
             asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
             wait()
 
-            if robot_state.mode == 'manual':
+            if robot_state.mode == 'auto':
                 kamera_testy.kamera()
                 robot_state.prediction = True
                 asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
+                logger.add("info", "Predykcja rodzaju klocka")
+                asyncio.run(send_log_to_clients(logger))
                 pred = predykcja.pred()
                 robot_state.prediction = False
                 asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
@@ -47,34 +51,34 @@ def task_tasma():
             start()
             sleep(2.1)
             wait() 
-            if robot_state.mode == 'manual':
+            if robot_state.mode == 'auto':
                 if pred == 0:
                     skrypt.tr1()
                 elif pred == 1:
                     skrypt.tr2()
                 elif pred == 2:
                     skrypt.tr3()
-            if robot_state.mode == 'auto':
+            if robot_state.mode == 'manual':
                 while robot_state.block == 3 :
-                    logger.add("info", "Robot is waiting for a container to be selected")
+                    logger.add("info", "Robot czeka na wskazanie kontenra")
                     asyncio.run(send_log_to_clients(logger))
                     asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
                     wait
                     sleep(2)
-                    print("Czekam na podanie trajektroii")
-                while robot_state.block != 3 :
-                    if robot_state.block == 0:
-                        skrypt.tr1()
-                        robot_state.block = 3
-                        asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
-                    elif robot_state.block == 1:
-                        skrypt.tr2()
-                        robot_state.block = 3
-                        asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
-                    elif robot_state.block == 2:
-                        skrypt.tr3()
-                        robot_state.block = 3
-                        asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+                    print(robot_state.block)
+
+                if robot_state.block == 0:
+                    skrypt.tr1()
+                    robot_state.block = 3
+                    asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+                elif robot_state.block == 1:
+                    skrypt.tr2()
+                    robot_state.block = 3
+                    asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
+                elif robot_state.block == 2:
+                    skrypt.tr3()
+                    robot_state.block = 3
+                    asyncio.run(send_state_to_clients(robot_state)) #aktualizacja
 
 
 
@@ -92,6 +96,8 @@ def task_czujnik():
                 asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
                 print(f"czerwony = {biala}")
                 sleep(3)
+                logger.add("info", "Bialy klocek jest w pojemniku")
+                asyncio.run(send_log_to_clients(logger))
                 robot_state.sensors["sensor2"].sensor_value = 0
                 asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
             if czujnik.czunik_kamery(6) == 1:
@@ -102,6 +108,8 @@ def task_czujnik():
                 asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
                 print(f"bialy = {czerwona}")
                 sleep(3)
+                logger.add("info", "Czerwony klocek jest w pojemniku")
+                asyncio.run(send_log_to_clients(logger))
                 robot_state.sensors["sensor3"].sensor_value = 0
                 asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
             if czujnik.czunik_kamery(13) == 1:
@@ -111,6 +119,8 @@ def task_czujnik():
                 asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
                 print(f"niebieski = {niebieski}")
                 sleep(3)    
+                logger.add("info", "Niebieski klocek jest w pojemniku")
+                asyncio.run(send_log_to_clients(logger))
                 robot_state.sensors["sensor4"].sensor_value = 0
                 asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
 

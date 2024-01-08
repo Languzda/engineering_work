@@ -8,10 +8,10 @@ class RobotCode:
         Container(container_id=3, container_name="blue_container", container_blocks=0)  #blue box #Dziala
         ],
         sensors={
-            "sensor1" : Sensor(sensor_id=1, sensor_name="sensor1", sensor_value=0), #camera sensor #Dziala
-            "sensor2": Sensor(sensor_id=2, sensor_name="sensor2", sensor_value=0),  #white box sensor #Dziala
-            "sensor3": Sensor(sensor_id=3, sensor_name="sensor3", sensor_value=0),  #red box sensor #Dziala
-            "sensor4": Sensor(sensor_id=4, sensor_name="sensor4", sensor_value=0)   #blue box sensor #Dziala
+            "sensor1" : Sensor(sensor_id=1, sensor_name="sensor kamery", sensor_value=0), #camera sensor #Dziala
+            "sensor2": Sensor(sensor_id=2, sensor_name="bialy sensor", sensor_value=0),  #white box sensor #Dziala
+            "sensor3": Sensor(sensor_id=3, sensor_name="czerwony sensor", sensor_value=0),  #red box sensor #Dziala
+            "sensor4": Sensor(sensor_id=4, sensor_name="niebieski sensor", sensor_value=0)   #blue box sensor #Dziala
         },
         logged=False,
         user="",

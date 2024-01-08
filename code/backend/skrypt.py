@@ -31,6 +31,13 @@ def move_to_take():
         if i < 32:  
             kit.servo[1].angle = 18+i  #50
             sleep(0.01)
+    # kit.servo[0].angle = 80
+    # sleep(1)
+    # kit.servo[2].angle =75
+    # sleep(1)
+    # kit.servo[1].angle =45
+    # sleep(1)
+
     
 def move_to_home(pos):
         
@@ -71,11 +78,11 @@ def move_to_basket1():
 
 def move_to_basket2():
 
+
     for i in range(180):
         if i < 105:
             kit.servo[0].angle = 75+i
             sleep(0.01)
-
     for i in range(180):
         if i < 20:  
             kit.servo[1].angle = 50+i  
@@ -162,3 +169,28 @@ def tr3():
     robot_state.robort_working = False
     asyncio.run(send_state_to_clients(robot_state)) #aktualizacja 
 
+
+
+# kit.servo[1].angle =120
+# sleep(1)
+# kit.servo[2].angle =150
+# sleep(1)
+# kit.servo[0].angle =80
+# sleep(1)
+# while True:
+#     przeglob = input("Wprowadz nr serwa: ")
+#     kat = input("Wprowadz liczbe: ")
+#     kat = int(kat)
+#     if przeglob == "1":
+#         kit.servo[0].angle =kat
+#         sleep(1)
+#     if przeglob == "2":
+#         kit.servo[1].angle =kat
+#         sleep(1)
+#     if przeglob == "3":
+#         kit.servo[2].angle =kat
+#         sleep(1)
+
+# move_to_take()
+# sleep(2)
+# move_to_home(80)
