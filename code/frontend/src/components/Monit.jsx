@@ -52,7 +52,7 @@ const Monit = (props) => {
       time: time,
     };
     console.log("new log", newLog);
-    setLogs((prev) => [...prev, newLog]);
+    return newLog;
   };
 
   useEffect(() => {
@@ -73,6 +73,14 @@ const Monit = (props) => {
       const data = JSON.parse(event.data);
       if (data.event === "update") {
         console.log("log", data.data);
+
+        const newLogs = data.data.map((log) => {
+          return addLog({ type: log.type, message: log.message }, log.time);
+        });
+
+        console.log("new logs", newLogs);
+
+        setLogs(newLogs);
       }
     };
 

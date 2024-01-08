@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+gpiozero
+keras
+matplotlib
+adafruit-circuitpython-servokit
